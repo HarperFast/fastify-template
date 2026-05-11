@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "description": "A template for building HarperDB applications",
   "type": "module",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "harper": "^5.0.11"
+  }
 }
