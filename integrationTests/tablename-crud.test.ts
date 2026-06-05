@@ -159,7 +159,11 @@ suite('TableName CRUD', (ctx: ContextWithHarper) => {
     // mount paths and assert the route is reachable.
     const candidates = [
       `${httpURL}/${componentName}/getAll`,
+      `${httpURL}/${componentName}/getAll/`,
       `${httpURL}/getAll`,
+      `${httpURL}/getAll/`,
+      `${httpURL}/${componentName}/routes/getAll`,
+      `${httpURL}/routes/getAll`,
     ];
 
     let matched: { path: string; body: unknown } | undefined;

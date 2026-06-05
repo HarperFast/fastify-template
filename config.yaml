@@ -7,9 +7,9 @@ graphqlSchema:  # These reads GraphQL schemas to define the schema of database/t
   # path: / # exported queries are on the root path by default
 fastifyRoutes: # This loads files that define fastify routes using fastify's auto-loader
   files: routes/*.js # specify the location of route definition modules
-  path: . # relative to the app-name, like  http://server/app-name/route-name
-static: # This allows static files to be directly accessible
-  root: web
-  files: web/**
-roles: # This can define the roles that are used in the application
-  files: roles.yaml
+  urlPath: . # relative to the app-name, like  http://server/app-name/route-name
+# static: # Uncomment to serve static files directly (create a `web/` directory first)
+#   root: web
+#   files: web/**
+# roles: # Uncomment to define application roles (create a `roles.yaml` file first)
+#   files: roles.yaml
