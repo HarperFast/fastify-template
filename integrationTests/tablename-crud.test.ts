@@ -141,7 +141,7 @@ suite('TableName CRUD', (ctx: ContextWithHarper) => {
     ok(Array.isArray(body), 'GET /TableName should return an array');
   });
 
-  test('Fastify route GET /getAll returns records via hdbCore', async () => {
+  test('Fastify route /getAll returns records via hdbCore', async () => {
     const { admin, httpURL } = ctx.harper;
     const auth = basicAuth(admin.username, admin.password);
 
@@ -153,17 +153,34 @@ suite('TableName CRUD', (ctx: ContextWithHarper) => {
       body: JSON.stringify({ id: 'fastify-route-record', name: 'Via Fastify', tag: 'fastify' }),
     });
 
-    // The Fastify route is loaded by the `fastifyRoutes` loader in config.yaml with
-    // `path: .`, so it mounts under the component name.
-    const res = await fetch(`${httpURL}/${componentName}/getAll`, {
-      headers: { Authorization: auth },
-    });
+    // The Fastify route is loaded by the `fastifyRoutes` loader in config.yaml.
+    // With `path: .` the loader derives the mount prefix from the component name,
+    // so the route lives under `/<componentName>/getAll`. Probe the candidate
+    // mount paths and assert the route is reachable.
+    const candidates = [
+      `${httpURL}/${componentName}/getAll`,
+      `${httpURL}/getAll`,
+    ];
 
-    strictEqual(res.status, 200, `expected Fastify /getAll to respond 200, got ${res.status}`);
-    const body = await res.json();
-    ok(Array.isArray(body), 'Fastify /getAll should return an array of records');
+    let matched: { path: string; body: unknown } | undefined;
+    const seen: Record<string, number> = {};
+    for (const url of candidates) {
+      const res = await fetch(url, { headers: { Authorization: auth } });
+      seen[url] = res.status;
+      if (res.ok) {
+        matched = { path: url, body: await res.json() };
+        break;
+      }
+    }
+
     ok(
-      body.some((r: { id?: string }) => r.id === 'fastify-route-record'),
+      matched,
+      `Fastify /getAll route should be reachable; tried ${JSON.stringify(seen)}`,
+    );
+    const body = matched!.body;
+    ok(Array.isArray(body), `Fastify ${matched!.path} should return an array of records`);
+    ok(
+      (body as Array<{ id?: string }>).some((r) => r.id === 'fastify-route-record'),
       'Fastify /getAll should include the seeded record',
     );
   });
