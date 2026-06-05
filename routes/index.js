@@ -3,9 +3,9 @@ const getAll = async (server, { hdbCore, logger }) => {
     url: '/getAll',
     method: 'GET',
     handler: async (request, reply) => {
-      request.body= {
+      request.body = {
         operation: 'sql',
-        sql: 'SELECT * FROM data.dogs'
+        sql: 'SELECT * FROM data.TableName'
       };
       return hdbCore.requestWithoutAuthentication(request);
     }
