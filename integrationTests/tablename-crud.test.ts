@@ -24,7 +24,8 @@ function basicAuth(username: string, password: string): string {
   return 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
 }
 
-suite('TableName CRUD', (ctx: ContextWithHarper) => {
+suite('TableName CRUD', (suiteCtx) => {
+  const ctx = suiteCtx as ContextWithHarper;
   before(async () => {
     await setupHarperWithFixture(ctx, fixtureDir, { harperBinPath });
   });
