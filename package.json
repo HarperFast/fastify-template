@@ -1,7 +1,19 @@
 {
   "name": "fastify-template",
   "version": "1.0.0",
-  "description": "A template for building HarperDB applications",
+  "description": "A template for building Harper applications",
   "type": "module",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "npm run test:integration",
+    "test:integration": "harper-integration-test-run --isolation=none \"integrationTests/**/*.test.ts\""
+  },
+  "dependencies": {
+    "harper": "^5.2.1"
+  },
+  "devDependencies": {
+    "@harperfast/integration-testing": "^0.4.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^6.0.3"
+  }
 }
